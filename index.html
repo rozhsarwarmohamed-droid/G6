@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>-ED Endings Pronunciation Cheat Sheet & Interactive Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    html {
+      height: 100%;
+      min-height: 0;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      margin: 0;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+
+    /* The app uses a fixed shell so Android browser chrome cannot cover controls. */
+    @supports (height: 100dvh) {
+      body { height: 100dvh; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    .app-header {
+      position: relative;
+      z-index: 30;
+      flex: 0 0 auto;
+      padding-top: max(0px, env(safe-area-inset-top, 0px));
+    }
+
+    .app-header > div { flex-wrap: wrap; }
+    .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; flex-wrap: wrap; }
+
+    .app-shell {
+      display: flex;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      flex: 0 0 220px;
+      width: 220px;
+      min-width: 0;
+      min-height: 0;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      background: #fff;
+      border-right: 1px solid #e2e8f0;
+      padding: 1rem .75rem max(1rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    .sidebar-heading {
+      padding: .25rem .7rem .85rem;
+      color: #64748b;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+    }
+
+    .sidebar-nav { display: flex; flex-direction: column; gap: .35rem; }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      min-height: 50px;
+      width: 100%;
+      padding: .65rem .75rem;
+      border: 1px solid transparent;
+      border-radius: .8rem;
+      color: #334155;
+      font-size: .95rem;
+      font-weight: 650;
+      text-decoration: none;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .sidebar-link i { width: 1.2rem; text-align: center; color: #64748b; }
+    .sidebar-link:hover, .sidebar-link:focus-visible { background: #eef2ff; border-color: #c7d2fe; color: #3730a3; outline: none; }
+    .sidebar-link:focus-visible, button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid #818cf8; outline-offset: 2px; }
+
+    .main-scroll {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      scroll-padding-bottom: 7rem;
+      padding-bottom: max(8rem, calc(env(safe-area-inset-bottom, 0px) + 8rem));
+    }
+
+    .main-content { width: 100%; }
+    .main-content section[id], .sound-column[id] { scroll-margin-top: 1rem; }
+    .page-footer { padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px)); }
+
+    /* Reliable fingertip targets for touch displays, including dynamically created chips. */
+    button, a[href], input, select, textarea, summary, [role="button"], [role="option"],
+    [draggable="true"], .drag-chip {
+      min-width: 48px;
+      min-height: 48px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    input[type="text"], input[type="search"], input[type="email"], input[type="number"] {
+      min-height: 48px;
+      font-size: 16px;
+    }
+
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+
+    /* On large touch displays, make supporting labels easier to read from a distance. */
+    .smartboard-mode .text-xs { font-size: .92rem !important; line-height: 1.4 !important; }
+    .smartboard-mode .text-sm { font-size: 1.05rem !important; line-height: 1.45 !important; }
+    .smartboard-mode .sidebar-link { min-height: 54px; font-size: 1.05rem; }
+    .smartboard-mode button { min-height: 52px; }
+    .smartboard-mode .rule-card { padding: 1rem; }
+    .smartboard-mode .main-content { font-size: 1.05rem; }
+
+    #columns-container { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sound-column { min-width: 0; }
+    .sound-column .rule-card { min-width: 0; }
+
+    @media (max-width: 1200px) and (min-width: 761px) {
+      #columns-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sidebar { flex-basis: 198px; width: 198px; }
+    }
+
+    @media (max-width: 760px) {
+      .app-shell { flex-direction: column; }
+      .sidebar {
+        display: block;
+        flex: 0 0 auto;
+        width: 100%;
+        height: 64px;
+        padding: .4rem .55rem;
+        border-right: 0;
+        border-bottom: 1px solid #e2e8f0;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        overscroll-behavior-y: none;
+      }
+      .sidebar-heading { display: none; }
+      .sidebar-nav { width: max-content; min-width: 100%; flex-direction: row; align-items: center; gap: .35rem; }
+      .sidebar-link { width: auto; min-height: 48px; padding: .45rem .75rem; font-size: .88rem; }
+      #columns-container { grid-template-columns: minmax(0, 1fr); }
+      .header-actions { justify-content: center; width: 100%; }
+      .app-header > div { justify-content: center; padding-top: .65rem; padding-bottom: .65rem; }
+    }
+
+    @media (max-height: 620px) and (min-width: 761px) {
+      .app-header > div { padding-top: .5rem; padding-bottom: .5rem; }
+      .main-content { padding-top: .9rem !important; }
+      .sidebar { padding-top: .65rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .main-scroll { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .card-flip {
+      perspective: 1000px;
+    }
+    .card-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .card-flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      backface-visibility: hidden;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="app-header bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+          <i class="fa-solid fa-volume-high text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">-ED Endings Guide</h1>
+          <p class="text-xs sm:text-sm text-slate-500">Interactive Pronunciation Rules & Practice</p>
+        </div>
+      </div>
+
+      <!-- Touch-friendly controls: speech speed, smartboard typography, fullscreen, and quiz shortcut -->
+      <div class="header-actions w-full md:w-auto">
+        <button id="tts-toggle" type="button" onclick="toggleTTSSpeed()" aria-label="Toggle speech speed" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-semibold transition flex items-center justify-center gap-1.5 border border-slate-200">
+          <i class="fa-solid fa-gauge-high text-indigo-600"></i>
+          <span>Speed: <span id="speed-label">Normal</span></span>
+        </button>
+        <button id="smartboard-toggle" type="button" onclick="toggleSmartboardMode()" aria-pressed="false" class="text-sm bg-violet-50 hover:bg-violet-100 text-violet-800 px-3 py-2 rounded-lg font-semibold transition flex items-center justify-center gap-1.5 border border-violet-200">
+          <i class="fa-solid fa-display"></i>
+          <span id="smartboard-label">Smartboard: Off</span>
+        </button>
+        <button id="fullscreen-toggle" type="button" onclick="toggleFullscreen()" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-semibold transition flex items-center justify-center gap-1.5 border border-slate-200">
+          <i id="fullscreen-icon" class="fa-solid fa-expand"></i>
+          <span id="fullscreen-label">Fullscreen</span>
+        </button>
+        <a href="#quiz-section" class="text-sm bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-3.5 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-indigo-200">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Practice Quiz</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar custom-scrollbar" aria-label="Lesson navigation">
+      <div class="sidebar-heading">LESSON NAVIGATION</div>
+      <nav class="sidebar-nav" aria-label="Jump to section">
+        <a class="sidebar-link" href="#overview"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Overview</span></a>
+        <a class="sidebar-link" href="#search-controls"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Find a verb</span></a>
+        <a class="sidebar-link" href="#columns-container"><i class="fa-solid fa-list-check" aria-hidden="true"></i><span>Sound rules</span></a>
+        <a class="sidebar-link" href="#col-t"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span>/t/ sound</span></a>
+        <a class="sidebar-link" href="#col-d"><i class="fa-solid fa-music" aria-hidden="true"></i><span>/d/ sound</span></a>
+        <a class="sidebar-link" href="#col-id"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>/ɪd/ sound</span></a>
+        <a class="sidebar-link" href="#quiz-section"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span>Practice quiz</span></a>
+      </nav>
+    </aside>
+
+    <main id="main-scroll" class="main-scroll custom-scrollbar" aria-label="Pronunciation lesson">
+      <div class="main-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
+
+    <!-- Overview Banner / Explanation -->
+    <section id="overview" class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+        <i class="fa-solid fa-microphone-lines text-[240px]"></i>
+      </div>
+      <div class="max-w-3xl relative z-10 space-y-3">
+        <span class="bg-indigo-500/30 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-400/30">Phonics Rule Guide</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">How to Pronounce Past Tense "-ed"</h2>
+        <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+          The pronunciation of regular past tense verbs depends on the <strong class="text-white underline decoration-indigo-400">final sound</strong> of the base verb. All ending rules below are organized in <strong class="text-white">strict alphabetical order</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <section id="search-controls" class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        
+        <!-- Search Input -->
+        <div class="relative w-full md:w-96">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input 
+            type="text" 
+            id="search-input" aria-label="Search verbs, endings, or sounds" 
+            placeholder="Search verb or sound (e.g. 'watch', 'p', 'walked')..." 
+            class="w-full pl-10 pr-14 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            oninput="handleSearch()"
+          >
+          <button id="clear-search" type="button" aria-label="Clear search" onclick="clearSearch()" class="hidden absolute right-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <button onclick="filterCategory('all')" id="btn-filter-all" type="button" class="filter-btn active text-xs sm:text-sm px-4 py-2 rounded-xl font-semibold border transition bg-slate-900 text-white border-slate-900">
+            All Sounds
+          </button>
+          <button onclick="filterCategory('t')" id="btn-filter-t" type="button" class="filter-btn text-xs sm:text-sm px-4 py-2 rounded-xl font-semibold border transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200">
+            <i class="fa-solid fa-bolt text-rose-500 mr-1"></i> /t/ (Unvoiced)
+          </button>
+          <button onclick="filterCategory('d')" id="btn-filter-d" type="button" class="filter-btn text-xs sm:text-sm px-4 py-2 rounded-xl font-semibold border transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-200">
+            <i class="fa-solid fa-music text-sky-500 mr-1"></i> /d/ (Voiced)
+          </button>
+          <button onclick="filterCategory('id')" id="btn-filter-id" type="button" class="filter-btn text-xs sm:text-sm px-4 py-2 rounded-xl font-semibold border transition bg-slate-50 text-slate-700 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200">
+            <i class="fa-solid fa-layer-group text-emerald-500 mr-1"></i> /ɪd/ (Extra Syllable)
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Search Result Summary Badge -->
+      <div id="search-summary" class="hidden text-xs text-slate-500 font-medium flex items-center justify-between pt-2 border-t border-slate-100">
+        <span>Found <strong id="search-count" class="text-indigo-600">0</strong> matching items</span>
+        <span class="text-slate-400">Click speaker icons to hear pronunciation</span>
+      </div>
+    </section>
+
+    <!-- 3 Categorized Columns -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6" id="columns-container">
+
+      <!-- Column 1: /t/ Sound -->
+      <div id="col-t" class="sound-column bg-white rounded-2xl border border-rose-100 shadow-sm overflow-hidden flex flex-col">
+        <!-- Column Header -->
+        <div class="bg-rose-50/80 border-b border-rose-100 p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-rose-500 text-white font-bold flex items-center justify-center text-sm shadow-sm">/t/</span>
+              <h3 class="text-lg font-bold text-slate-900">Unvoiced Sound</h3>
+            </div>
+            <button onclick="speakText('Unvoiced T sound. The throat does not vibrate.')" class="text-rose-600 hover:text-rose-800 p-1.5 rounded-lg hover:bg-rose-100/50 transition" title="Listen">
+              <i class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+          </div>
+          <p class="text-xs text-rose-800 leading-relaxed font-medium">
+            Your vocal cords <span class="underline decoration-rose-400">do not vibrate</span> at the end of the base verb. The -ED sounds like a sharp <strong>"T"</strong>.
+          </p>
+        </div>
+
+        <!-- Rules List (Alphabetical) -->
+        <div id="list-t" class="p-4 space-y-3">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Column 2: /d/ Sound -->
+      <div id="col-d" class="sound-column bg-white rounded-2xl border border-sky-100 shadow-sm overflow-hidden flex flex-col">
+        <!-- Column Header -->
+        <div class="bg-sky-50/80 border-b border-sky-100 p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-sky-500 text-white font-bold flex items-center justify-center text-sm shadow-sm">/d/</span>
+              <h3 class="text-lg font-bold text-slate-900">Voiced Sound</h3>
+            </div>
+            <button onclick="speakText('Voiced D sound. The vocal cords vibrate.')" class="text-sky-600 hover:text-sky-800 p-1.5 rounded-lg hover:bg-sky-100/50 transition" title="Listen">
+              <i class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+          </div>
+          <p class="text-xs text-sky-800 leading-relaxed font-medium">
+            Your vocal cords <span class="underline decoration-sky-400">vibrate</span> at the end of the base verb (includes all vowel sounds). The -ED sounds like a soft <strong>"D"</strong>.
+          </p>
+        </div>
+
+        <!-- Rules List (Alphabetical) -->
+        <div id="list-d" class="p-4 space-y-3">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Column 3: /id/ Sound -->
+      <div id="col-id" class="sound-column bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden flex flex-col">
+        <!-- Column Header -->
+        <div class="bg-emerald-50/80 border-b border-emerald-100 p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-emerald-500 text-white font-bold flex items-center justify-center text-sm shadow-sm">/ɪd/</span>
+              <h3 class="text-lg font-bold text-slate-900">Extra Syllable</h3>
+            </div>
+            <button onclick="speakText('Extra syllable id sound. Used after T or D letters.')" class="text-emerald-600 hover:text-emerald-800 p-1.5 rounded-lg hover:bg-emerald-100/50 transition" title="Listen">
+              <i class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+          </div>
+          <p class="text-xs text-emerald-800 leading-relaxed font-medium">
+            Used <span class="underline decoration-emerald-400">only</span> when base verb ends in T or D. Adds an <strong>extra syllable</strong> ("id" or "ed").
+          </p>
+        </div>
+
+        <!-- Rules List (Alphabetical) -->
+        <div id="list-id" class="p-4 space-y-3">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Quiz / Interactive Practice Section -->
+    <section id="quiz-section" class="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Self-Assessment</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Interactive Practice & Quiz Mode</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="quiz-score" class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200">
+            Score: <span class="text-indigo-600">0</span> / <span id="quiz-total">0</span>
+          </span>
+          <button onclick="resetQuiz()" class="text-xs text-slate-500 hover:text-slate-800 font-medium px-2 py-1 transition">
+            <i class="fa-solid fa-rotate-right mr-1"></i> Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Quiz Flashcard Card -->
+      <div class="max-w-xl mx-auto">
+        <div id="quiz-card-wrapper" class="card-flip min-h-[220px] w-full">
+          <div id="quiz-card" class="card-inner w-full min-h-[220px] relative bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col justify-between items-center text-center border border-indigo-900/50">
+            
+            <!-- Question Header -->
+            <div class="w-full flex items-center justify-between text-xs text-indigo-300 font-medium">
+              <span>Word Challenge</span>
+              <button onclick="speakCurrentQuizWord()" class="hover:text-white transition p-1" title="Listen to verb">
+                <i class="fa-solid fa-volume-high text-base"></i>
+              </button>
+            </div>
+
+            <!-- Verb Display -->
+            <div class="my-4">
+              <span id="quiz-word" class="text-3xl sm:text-4xl font-extrabold tracking-wide text-white">---</span>
+              <p id="quiz-base-hint" class="text-xs text-indigo-300 mt-2">Base verb ending sound: <span id="quiz-sound-ending" class="font-bold text-yellow-300">?</span></p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div id="quiz-options" class="grid grid-cols-3 gap-3 w-full">
+              <button onclick="submitQuizAnswer('t')" class="bg-rose-600/30 hover:bg-rose-600 border border-rose-500/50 text-white py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition shadow-sm active:scale-95">
+                /t/ Sound
+              </button>
+              <button onclick="submitQuizAnswer('d')" class="bg-sky-600/30 hover:bg-sky-600 border border-sky-500/50 text-white py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition shadow-sm active:scale-95">
+                /d/ Sound
+              </button>
+              <button onclick="submitQuizAnswer('id')" class="bg-emerald-600/30 hover:bg-emerald-600 border border-emerald-500/50 text-white py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition shadow-sm active:scale-95">
+                /ɪd/ Sound
+              </button>
+            </div>
+
+            <!-- Feedback Area -->
+            <div id="quiz-feedback" class="hidden w-full pt-3 border-t border-slate-700/60 flex items-center justify-between">
+              <span id="quiz-feedback-text" class="text-xs font-bold"></span>
+              <button onclick="nextQuizQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-semibold transition">
+                Next Word <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+      <!-- Footer remains inside the main scroller so it never reduces the usable lesson viewport. -->
+      <footer class="page-footer bg-white border-t border-slate-200 mt-8 py-6 text-center text-sm text-slate-500 rounded-xl">
+        <div class="max-w-7xl mx-auto px-4">
+          <p>Educational Phonics & Pronunciation Tool • Strict Alphabetical Sound Rules</p>
+          <p class="mt-2 text-xs">Tip: use the left navigation to jump between sections. On smaller screens, the navigation becomes a horizontal strip.</p>
+        </div>
+      </footer>
+      </div>
+    </main>
+  </div>
+
+  <!-- JavaScript App Logic -->
+  <script>
+    // Master Pronunciation Data (Rules in strict Alphabetical Order within each sound group)
+    const ED_DATA = {
+      t: {
+        title: "/t/ Sound (Unvoiced)",
+        color: "rose",
+        rules: [
+          { rule: "C / CH", phonetic: "[tʃ / k]", desc: "Ends with hard 'C' or 'CH'", examples: ["watched", "danced", "checked", "locked"] },
+          { rule: "F / GH / PH", phonetic: "[f]", desc: "Ends with 'F' sound", examples: ["laughed", "coughed", "sniffed"] },
+          { rule: "K", phonetic: "[k]", desc: "Ends with 'K' sound", examples: ["walked", "talked", "worked", "asked"] },
+          { rule: "P", phonetic: "[p]", desc: "Ends with 'P' sound", examples: ["stopped", "helped", "jumped", "hopped"] },
+          { rule: "S / SS / X", phonetic: "[s / ks]", desc: "Ends with 'S' or 'X' sound", examples: ["kissed", "fixed", "missed", "relaxed"] },
+          { rule: "SH", phonetic: "[ʃ]", desc: "Ends with 'SH' sound", examples: ["washed", "pushed", "brushed", "wished"] }
+        ]
+      },
+      d: {
+        title: "/d/ Sound (Voiced)",
+        color: "sky",
+        rules: [
+          { rule: "B", phonetic: "[b]", desc: "Ends with 'B' sound", examples: ["robbed", "grabbed", "rubbed"] },
+          { rule: "G", phonetic: "[ɡ]", desc: "Ends with 'G' sound", examples: ["hugged", "begged", "tagged"] },
+          { rule: "J / GE", phonetic: "[dʒ]", desc: "Ends with soft 'G' / 'J' sound", examples: ["judged", "changed", "managed"] },
+          { rule: "L", phonetic: "[l]", desc: "Ends with 'L' sound", examples: ["called", "smiled", "pulled", "cleaned"] },
+          { rule: "M", phonetic: "[m]", desc: "Ends with 'M' sound", examples: ["climbed", "seemed", "dreamed"] },
+          { rule: "N", phonetic: "[n]", desc: "Ends with 'N' sound", examples: ["cleaned", "opened", "listened", "phoned"] },
+          { rule: "R", phonetic: "[ɹ]", desc: "Ends with 'R' sound", examples: ["offered", "answered", "ordered"] },
+          { rule: "V", phonetic: "[v]", desc: "Ends with 'V' sound", examples: ["loved", "lived", "saved", "arrived"] },
+          { rule: "VOWELS / Y", phonetic: "[aɪ, iː, eɪ, ...]", desc: "Ends with any vowel sound or 'Y'", examples: ["played", "enjoyed", "carried", "snowed"] },
+          { rule: "Z / S (voiced)", phonetic: "[z]", desc: "Ends with 'Z' sound", examples: ["buzzed", "closed", "pleased"] }
+        ]
+      },
+      id: {
+        title: "/ɪd/ Sound (Extra Syllable)",
+        color: "emerald",
+        rules: [
+          { rule: "D", phonetic: "[d]", desc: "Base verb ends with 'D' sound", examples: ["needed", "decided", "added", "folded"] },
+          { rule: "T", phonetic: "[t]", desc: "Base verb ends with 'T' sound", examples: ["wanted", "visited", "started", "painted"] }
+        ]
+      }
+    };
+
+    // Quiz Questions Pool
+    const QUIZ_QUESTIONS = [
+      { word: "walked", base: "walk", ending: "K", category: "t" },
+      { word: "played", base: "play", ending: "Vowel / Y", category: "d" },
+      { word: "wanted", base: "want", ending: "T", category: "id" },
+      { word: "watched", base: "watch", ending: "CH", category: "t" },
+      { word: "cleaned", base: "clean", ending: "N", category: "d" },
+      { word: "needed", base: "need", ending: "D", category: "id" },
+      { word: "fixed", base: "fix", ending: "X", category: "t" },
+      { word: "phoned", base: "phone", ending: "N", category: "d" },
+      { word: "visited", base: "visit", ending: "T", category: "id" },
+      { word: "laughed", base: "laugh", ending: "GH (F)", category: "t" },
+      { word: "loved", base: "love", ending: "V", category: "d" },
+      { word: "decided", base: "decide", ending: "D", category: "id" }
+    ];
+
+    // App State
+    let speechRate = 0.9;
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let totalAnswered = 0;
+    let quizAnswered = false;
+
+    // Initialize Application
+    window.onload = function() {
+      renderRulesLists();
+      initQuiz();
+
+      // Large touch displays start in the enlarged mode, but the teacher can switch it off.
+      try {
+        if (window.matchMedia('(pointer: coarse)').matches && window.innerWidth >= 1024) {
+          document.body.classList.add('smartboard-mode');
+        }
+      } catch (error) {
+        // Older embedded browsers may not implement matchMedia; manual mode remains available.
+      }
+      updateSmartboardButton();
+      updateFullscreenButton();
+    };
+
+    function updateSmartboardButton() {
+      const enabled = document.body.classList.contains('smartboard-mode');
+      const button = document.getElementById('smartboard-toggle');
+      const label = document.getElementById('smartboard-label');
+      if (button) button.setAttribute('aria-pressed', String(enabled));
+      if (label) label.textContent = enabled ? 'Smartboard: On' : 'Smartboard: Off';
+    }
+
+    function toggleSmartboardMode() {
+      document.body.classList.toggle('smartboard-mode');
+      updateSmartboardButton();
+    }
+
+    function updateFullscreenButton() {
+      const active = Boolean(document.fullscreenElement);
+      const label = document.getElementById('fullscreen-label');
+      const icon = document.getElementById('fullscreen-icon');
+      const button = document.getElementById('fullscreen-toggle');
+      if (label) label.textContent = active ? 'Exit fullscreen' : 'Fullscreen';
+      if (icon) icon.className = active ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+      if (button) button.setAttribute('aria-pressed', String(active));
+    }
+
+    async function toggleFullscreen() {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          alert('Fullscreen is not available in this browser. You can still use the page in landscape mode.');
+        }
+      } catch (error) {
+        alert('Fullscreen was blocked by the browser. Please use the browser menu to enter fullscreen.');
+      }
+      updateFullscreenButton();
+    }
+
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+
+    // TTS Speed Toggle
+    function toggleTTSSpeed() {
+      if (speechRate === 0.9) {
+        speechRate = 0.6;
+        document.getElementById('speed-label').innerText = 'Slow';
+      } else {
+        speechRate = 0.9;
+        document.getElementById('speed-label').innerText = 'Normal';
+      }
+    }
+
+    // Text-To-Speech Synthesizer
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        alert("Speech synthesis is not supported in your browser.");
+        return;
+      }
+      window.speechSynthesis.cancel(); // Stop ongoing speech
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = speechRate;
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Render Rule Cards into Columns
+    function renderRulesLists() {
+      ['t', 'd', 'id'].forEach(type => {
+        const container = document.getElementById(`list-${type}`);
+        container.innerHTML = '';
+
+        ED_DATA[type].rules.forEach(item => {
+          const card = document.createElement('div');
+          card.className = `rule-card p-3.5 rounded-xl border bg-slate-50 border-slate-200/80 hover:bg-white hover:border-${ED_DATA[type].color}-300 hover:shadow-sm transition space-y-2`;
+          card.setAttribute('data-rule', item.rule.toLowerCase());
+          card.setAttribute('data-examples', item.examples.join(' ').toLowerCase());
+
+          // Highlight -ed in example chips
+          const exampleChips = item.examples.map(ex => {
+            const base = ex.replace(/(ed|d)$/, '');
+            const edPart = ex.slice(base.length);
+            return `
+              <button type="button" aria-label="Listen to ${ex}" onclick="speakText('${ex}')" class="inline-flex items-center justify-center text-xs bg-white border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 px-3 py-2 rounded-lg font-semibold text-slate-700 transition">
+                <span>${base}<strong class="text-${ED_DATA[type].color}-600 font-bold">${edPart}</strong></span>
+                <i class="fa-solid fa-volume-high text-[10px] ml-1.5 text-slate-400"></i>
+              </button>
+            `;
+          }).join('');
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="font-extrabold text-sm text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200 shadow-2xs">${item.rule}</span>
+                <span class="text-xs font-mono text-slate-400">${item.phonetic}</span>
+              </div>
+              <button onclick="speakText('Rule ${item.rule}. Examples: ${item.examples.join(', ')}')" class="text-xs text-slate-400 hover:text-indigo-600 transition p-1">
+                <i class="fa-solid fa-circle-play text-base"></i>
+              </button>
+            </div>
+            <p class="text-xs text-slate-500">${item.desc}</p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              ${exampleChips}
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      });
+    }
+
+    // Search and Filter Functionality
+    function handleSearch() {
+      const query = document.getElementById('search-input').value.trim().toLowerCase();
+      const clearBtn = document.getElementById('clear-search');
+      const summaryBox = document.getElementById('search-summary');
+      const countEl = document.getElementById('search-count');
+
+      if (query.length > 0) {
+        clearBtn.classList.remove('hidden');
+        summaryBox.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+        summaryBox.classList.add('hidden');
+      }
+
+      let matches = 0;
+      const allCards = document.querySelectorAll('.rule-card');
+
+      allCards.forEach(card => {
+        const ruleAttr = card.getAttribute('data-rule');
+        const exAttr = card.getAttribute('data-examples');
+
+        if (ruleAttr.includes(query) || exAttr.includes(query)) {
+          card.style.display = 'block';
+          matches++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      countEl.innerText = matches;
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      handleSearch();
+    }
+
+    // Category Filter Buttons
+    function filterCategory(cat) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
+        btn.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
+      });
+
+      const activeBtn = document.getElementById(`btn-filter-${cat}`);
+      activeBtn.classList.remove('bg-slate-50', 'text-slate-700', 'border-slate-200');
+      activeBtn.classList.add('bg-slate-900', 'text-white', 'border-slate-900');
+
+      const cols = {
+        t: document.getElementById('col-t'),
+        d: document.getElementById('col-d'),
+        id: document.getElementById('col-id')
+      };
+
+      if (cat === 'all') {
+        Object.values(cols).forEach(c => c.style.display = 'flex');
+      } else {
+        Object.keys(cols).forEach(key => {
+          cols[key].style.display = (key === cat) ? 'flex' : 'none';
+        });
+      }
+    }
+
+    // Interactive Quiz Logic
+    function initQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      totalAnswered = 0;
+      updateQuizScore();
+      loadQuizQuestion();
+    }
+
+    function loadQuizQuestion() {
+      quizAnswered = false;
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      document.getElementById('quiz-word').innerText = q.word;
+      document.getElementById('quiz-sound-ending').innerText = q.ending;
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.classList.add('hidden');
+      
+      const options = document.getElementById('quiz-options');
+      options.classList.remove('hidden');
+    }
+
+    function submitQuizAnswer(selected) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const isCorrect = (selected === q.category);
+
+      totalAnswered++;
+      if (isCorrect) quizScore++;
+
+      updateQuizScore();
+
+      const feedback = document.getElementById('quiz-feedback');
+      const feedbackText = document.getElementById('quiz-feedback-text');
+
+      feedback.classList.remove('hidden');
+
+      if (isCorrect) {
+        feedbackText.className = 'text-xs font-bold text-emerald-400 flex items-center gap-1.5';
+        feedbackText.innerHTML = `<i class="fa-solid fa-circle-check text-sm"></i> Correct! "${q.word}" uses the /${getSoundSymbol(q.category)}/ sound.`;
+        speakText(`Correct! ${q.word}`);
+      } else {
+        feedbackText.className = 'text-xs font-bold text-rose-400 flex items-center gap-1.5';
+        feedbackText.innerHTML = `<i class="fa-solid fa-circle-xmark text-sm"></i> Incorrect. "${q.word}" uses /${getSoundSymbol(q.category)}/.`;
+        speakText(`Incorrect. ${q.word} is pronounced with ${getSoundSymbol(q.category)} sound.`);
+      }
+    }
+
+    function getSoundSymbol(cat) {
+      if (cat === 't') return 't';
+      if (cat === 'd') return 'd';
+      return 'ɪd';
+    }
+
+    function nextQuizQuestion() {
+      currentQuizIndex = (currentQuizIndex + 1) % QUIZ_QUESTIONS.length;
+      loadQuizQuestion();
+    }
+
+    function resetQuiz() {
+      initQuiz();
+    }
+
+    function updateQuizScore() {
+      document.getElementById('quiz-score').querySelector('span').innerText = quizScore;
+      document.getElementById('quiz-total').innerText = totalAnswered;
+    }
+
+    function speakCurrentQuizWord() {
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      speakText(q.word);
+    }
+  </script>
+</body>
+</html>
